@@ -1,12 +1,12 @@
 <?php
 
-namespace Database\Factories;
+namespace Workbench\Database\Factories;
 
-use App\Models\Book;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Workbench\App\Models\Book;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Book>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Workbench\App\Models\Book>
  */
 class BookFactory extends Factory
 {
@@ -24,5 +24,15 @@ class BookFactory extends Factory
             'author' => $this->faker->name(),
             'description' => $this->faker->text(),
         ];
+    }
+
+    /**
+     * Hide record.
+     */
+    public function hidden(): Factory
+    {
+        return $this->state(fn () => [
+            'searchable' => false,
+        ]);
     }
 }

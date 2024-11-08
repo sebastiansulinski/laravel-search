@@ -1,11 +1,10 @@
 <?php
 
-namespace Database\Seeders;
+namespace Workbench\Database\Seeders;
 
-use App\Models\Book;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Workbench\App\Models\Book;
 
 class BookSeeder extends Seeder
 {
@@ -16,8 +15,6 @@ class BookSeeder extends Seeder
     {
         DB::connection()->disableQueryLog();
 
-        Book::factory(200000)->make()->chunk(1000)->each(function (Collection $books) {
-            DB::table('books')->insert($books->toArray());
-        });
+        Book::factory(20)->create();
     }
 }

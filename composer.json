@@ -4,8 +4,7 @@
     "description": "A lightweight search component for Laravel 11+.",
     "keywords": [
         "laravel",
-        "search",
-        "laravel-search"
+        "search"
     ],
     "authors": [
         {
@@ -60,7 +59,7 @@
                 "SebastianSulinski\\Search\\SearchServiceProvider"
             ],
             "aliases": {
-                "Search": "SebastianSulinski\\Search\\Search"
+                "Search": "SebastianSulinski\\Search\\Facades\\Search"
             }
         }
     },

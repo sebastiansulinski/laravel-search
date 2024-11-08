@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('director');
             $table->text('description');
+            $table->boolean('searchable')->default(true);
             $table->timestamps();
         });
     }

@@ -1,11 +1,10 @@
 <?php
 
-namespace Database\Seeders;
+namespace Workbench\Database\Seeders;
 
-use App\Models\Movie;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Workbench\App\Models\Movie;
 
 class MovieSeeder extends Seeder
 {
@@ -16,8 +15,6 @@ class MovieSeeder extends Seeder
     {
         DB::connection()->disableQueryLog();
 
-        Movie::factory(200000)->make()->chunk(1000)->each(function (Collection $books) {
-            DB::table('movies')->insert($books->toArray());
-        });
+        Movie::factory(20)->create();
     }
 }

@@ -19,21 +19,21 @@ class SearchManager extends Manager
     }
 
     /**
-     * Get typesense driver.
+     * Create typesense driver.
      *
-     * @throws \Typesense\Exceptions\ConfigError
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function createTypesenseDriver(): Indexer
     {
         return new Typesense(
-            client: new Client($this->config->get('services.typesense')),
+            client: $this->container->make(Client::class),
             models: new Collection($this->config->get('search.models')),
             collections: $this->config->get('search.drivers.typesense.collections')
         );
     }
 
     /**
-     * Get null driver.
+     * Create null driver.
      */
     public function createNullDriver(): Indexer
     {

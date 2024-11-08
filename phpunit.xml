@@ -6,15 +6,19 @@
 >
     <testsuites>
         <testsuite name="Feature">
-            <directory>tests/Feature</directory>
+            <directory>./tests/Feature</directory>
+        </testsuite>
+        <testsuite name="Unit">
+            <directory>./tests/Unit</directory>
         </testsuite>
     </testsuites>
     <source>
         <include>
-            <directory>src</directory>
+            <directory>./src</directory>
         </include>
     </source>
     <php>
+        <env name="APP_KEY" value="AckfSECXIvnK5r28GVIWUAxmbBSjTsmF"/>
         <env name="APP_ENV" value="testing"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
         <env name="BCRYPT_ROUNDS" value="4"/>

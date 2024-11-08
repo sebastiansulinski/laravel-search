@@ -1,10 +1,14 @@
 <?php
 
-namespace SebastianSulinski\Search;
+namespace SebastianSulinski\Search\Facades;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Facade;
 use SebastianSulinski\Search\Filter\Response;
+use SebastianSulinski\Search\IndexableDocument;
+use SebastianSulinski\Search\Indexer;
+use SebastianSulinski\Search\Requests\SearchRequest;
+use SebastianSulinski\Search\SearchManager;
 
 /**
  * @method static bool create(IndexableDocument $document)
@@ -30,6 +34,14 @@ class Search extends Facade
     public static function withoutRoutes(): void
     {
         static::$loadRoutes = false;
+    }
+
+    /**
+     * Add custom validation rules for a given index.
+     */
+    public static function validation(string $index, callable|object|array $rules): void
+    {
+        SearchRequest::macro($index, $rules);
     }
 
     /**

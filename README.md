@@ -1,10 +1,54 @@
-# Register search request parameters for your given implementation
+# Lightweight search for Laravel 11 +
 
-Within your `AppServiceProvider::boot` method add all relevant validation rules.
-By default, request will only validate `index` and `params` and will merge the ones from the macro with it.
+This package provides a simple, lightweight search component for Laravel 11+.
+
+In contrast to the well known [Laravel Scout](https://laravel.com/docs/11.x/scout), it allows models to be associated
+with more than one index with separate payload for each, which was the much needed feature for my current project.
+
+Currently only `typesense` driver is available, but if you feel like contributing a different implementation feel free
+to submit a PR.
+
+## Installation
+
+```bash
+composer create-project sebastiansulinski/laravel-search
+```
+
+## Configuration
+
+Start by publishing vendor configuration file `search.php`
+
+```bash
+php artisan vendor:publish --provider="SebastianSulinski\Search\SearchServiceProvider"
+```
+
+Within the configuration file update parameters for your selected driver and add all models to the `models` array, as
+well as
+all available indexes to `indexes`:
 
 ```php
-\App\Search\Requests\SearchRequest::macro('global_search', fn (SearchRequest $request) => [
+'models' => [
+    App\Models\Book::class,
+    App\Models\Movie::class,
+],
+
+'indexes' => [
+    'global_search',
+    'books',
+    'movies',
+]
+```
+
+## Register search request parameters for your given implementation
+
+Within your `AppServiceProvider::boot` method add all relevant validation rules for a given index.
+These will be used with the `Indexer::search` method - if you are using different approach for the search, you can
+ignore these.
+By default, only `index` and `params` (as array) are validated - whatever you define via this method will be merged to
+it.
+
+```php
+\SebastianSulinski\Search\Facades\Search::validation('global_search', fn (\Illuminate\Foundation\Http\FormRequest $request) => [
     'params.q' => [
         'nullable',
         'string',
@@ -40,10 +84,54 @@ By default, request will only validate `index` and `params` and will merge the o
 ]);
 ```
 
-# Disable default routes
+## Disable default routes
 
 To disable default routes add the following to your `AppServiceProvider::register` method:
 
 ```php
-\App\Search\Search::withoutRoutes();
+\SebastianSulinski\Search\Facades\Search::withoutRoutes();
 ```
+
+## Models
+
+Each of the models defined within the configuration file under `models` array has to implement `IndexableDocument` and
+use `SearchIndexable` trait.
+
+You will also need to implement two methods:
+
+### searchableAs
+
+This method returns a list of indexes the record should be listed under.
+
+```php
+public static function searchableAs(): array
+{
+    return ['global_search'];
+}
+```
+
+### toSearchableArray
+
+This method returns the payload in the form of array with the key representing corresponding index.
+
+```php
+public function toSearchableArray(): array
+{
+    return [
+        'global_search' => [
+            'type' => 'book',
+            'id' => $this->getSearchKey(),
+            'name' => $this->name,
+            'author' => $this->author,
+            'description' => $this->description,
+            'created_at' => $this->created_at->timestamp,
+        ],
+    ];
+}
+```
+
+You can also overwrite the `shouldBeSearchable` method to indicate whether the record should be indexed.
+
+## Contributions
+
+Contributions are welcome, but please make sure your code contains all necessary bells and whistles - pint it etc.

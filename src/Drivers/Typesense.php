@@ -15,12 +15,14 @@ use Typesense\Client;
 use Typesense\Exceptions\ObjectNotFound;
 use Typesense\Exceptions\TypesenseClientError;
 
-readonly class Typesense implements Indexer
+class Typesense implements Indexer
 {
+    use DriverHelpers;
+
     /**
      * Indexer constructor.
      */
-    public function __construct(private Client $client, private Collection $models, private array $collections) {}
+    public function __construct(private readonly Client $client, private readonly Collection $models, private readonly array $collections) {}
 
     /**
      * {@inheritDoc}
@@ -144,51 +146,9 @@ readonly class Typesense implements Indexer
      * {@inheritDoc}
      *
      * @throws \Http\Client\Exception
-     * @throws \JsonException
      * @throws \Typesense\Exceptions\TypesenseClientError
      */
-    public function import(?string $index = null): void
-    {
-        $indexes = $this->documentIndexes();
-
-        if ($index) {
-            $this->importDocuments($indexes[$index], $index);
-
-            return;
-        }
-
-        $indexes->each($this->importDocuments(...));
-    }
-
-    /**
-     * Get all documents grouped by index key.
-     */
-    private function documentIndexes(): Collection
-    {
-        return $this->models->reduce($this->groupDocuments(...), new Collection);
-    }
-
-    /**
-     * Import documents for the given index.
-     *
-     * @throws \Http\Client\Exception
-     * @throws \JsonException
-     * @throws \Typesense\Exceptions\TypesenseClientError
-     */
-    private function importDocuments(array $documents, string $index): void
-    {
-        foreach ($documents as $document) {
-            $this->addBulk($index, $document::searchable($index));
-        }
-    }
-
-    /**
-     * Import documents to collection.
-     *
-     * @throws \Http\Client\Exception
-     * @throws \Typesense\Exceptions\TypesenseClientError
-     */
-    private function addBulk(string $index, LazyCollection $payload): void
+    protected function importDocuments(string $index, LazyCollection $payload): void
     {
         if (! $this->collection($index)) {
             $this->client->collections->create(
@@ -197,7 +157,9 @@ readonly class Typesense implements Indexer
         }
 
         $payload->chunk(50)->each(
-            fn (LazyCollection $chunk) => ImportSearch::dispatch($index, $chunk->toArray())
+            fn (LazyCollection $chunk) => ImportSearch::dispatch(
+                $index, $chunk->toArray()
+            )
         );
     }
 
@@ -230,22 +192,5 @@ readonly class Typesense implements Indexer
         }
 
         return true;
-    }
-
-    /**
-     * Reduce document.
-     *
-     * @param  class-string  $document
-     */
-    private function groupDocuments(Collection $result, string $document): Collection
-    {
-        foreach ($document::searchableAs() as $searchable) {
-            $result[$searchable] = array_merge(
-                $result[$searchable] ?? [],
-                [$document]
-            );
-        }
-
-        return $result;
     }
 }
