@@ -15,10 +15,20 @@
     ],
     "license": "MIT",
     "require": {
-        "laravel/framework": "^11.30"
+        "php": "^8.2",
+        "laravel/framework": "^11.30",
+        "typesense/typesense-php": "^4.9",
+        "laravel/pint": "^1.18"
+    },
+    "autoload": {
+        "psr-4": {
+            "SebastianSulinski\\Search\\": "src",
+            "SebastianSulinski\\SearchTests\\": "tests"
+        }
     },
     "require-dev": {
-        "orchestra/testbench": "^9.5"
+        "orchestra/testbench": "^9.5",
+        "phpunit/phpunit": "^11.0.1"
     },
     "autoload-dev": {
         "psr-4": {
@@ -43,5 +53,20 @@
         "lint": [
             "@php vendor/bin/phpstan analyse --verbose --ansi"
         ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "SebastianSulinski\\Search\\SearchServiceProvider"
+            ],
+            "aliases": {
+                "Search": "SebastianSulinski\\Search\\Search"
+            }
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     }
 }

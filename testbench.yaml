@@ -1,5 +1,6 @@
 providers:
-  # - Workbench\App\Providers\WorkbenchServiceProvider
+  - SebastianSulinski\Search\SearchServiceProvider
+  - Workbench\App\Providers\WorkbenchServiceProvider
 
 migrations:
   - workbench/database/migrations
