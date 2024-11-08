@@ -1,7 +1,7 @@
 {
     "name": "sebastiansulinski/laravel-search",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "A lightweight search component for Laravel 11+.",
     "keywords": [
         "laravel",
         "search",
