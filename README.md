@@ -11,7 +11,7 @@ to submit a PR.
 ## Installation
 
 ```bash
-composer create-project sebastiansulinski/laravel-search
+composer require sebastiansulinski/laravel-search
 ```
 
 ## Configuration
