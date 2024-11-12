@@ -16,7 +16,9 @@ class ImportSearch implements ShouldQueue
     public function __construct(
         private readonly string $index,
         private readonly array $documents
-    ) {}
+    ) {
+        $this->queue = config('search.queue');
+    }
 
     /**
      * Execute the job.

@@ -108,4 +108,17 @@ return [
     */
 
     'chunk' => 500,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default Queue Connection Name
+    |--------------------------------------------------------------------------
+    |
+    | Laravel's queue supports a variety of backends via a single, unified
+    | API, giving you convenient access to each backend using identical
+    | syntax for each. The default queue connection is defined below.
+    |
+    */
+
+    'queue' => env('SEARCH_QUEUE_CONNECTION', env('QUEUE_CONNECTION', 'database')),
 ];

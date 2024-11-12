@@ -39,6 +39,49 @@ all available indexes to `indexes`:
 ]
 ```
 
+You can also update the default queue the import job will run on using `SEARCH_QUEUE_CONNECTION` environment variable -
+otherwise the default queue will be used.
+
+## Models
+
+Each of the models defined within the configuration file under `models` array has to implement `IndexableDocument` and
+use `SearchIndexable` trait.
+
+You will also need to implement two methods:
+
+### searchableAs
+
+This method returns a list of indexes the record should be listed under.
+
+```php
+public static function searchableAs(): array
+{
+    return ['global_search'];
+}
+```
+
+### toSearchableArray
+
+This method returns the payload in the form of array with the key representing corresponding index.
+
+```php
+public function toSearchableArray(): array
+{
+    return [
+        'global_search' => [
+            'type' => 'book',
+            'id' => $this->getSearchKey(),
+            'name' => $this->name,
+            'author' => $this->author,
+            'description' => $this->description,
+            'created_at' => $this->created_at->timestamp,
+        ],
+    ];
+}
+```
+
+You can also overwrite the `shouldBeSearchable` method to indicate whether the record should be indexed.
+
 ## Register search request parameters for your given implementation
 
 Within your `AppServiceProvider::boot` method add all relevant validation rules for a given index.
@@ -92,45 +135,27 @@ To disable default routes add the following to your `AppServiceProvider::registe
 \SebastianSulinski\Search\Facades\Search::withoutRoutes();
 ```
 
-## Models
+## Import records
 
-Each of the models defined within the configuration file under `models` array has to implement `IndexableDocument` and
-use `SearchIndexable` trait.
+The following command will import all records for all indexes using default queue.
 
-You will also need to implement two methods:
-
-### searchableAs
-
-This method returns a list of indexes the record should be listed under.
-
-```php
-public static function searchableAs(): array
-{
-    return ['global_search'];
-}
+```bash
+php artisan app:import-search
 ```
 
-### toSearchableArray
+You can also specify the index you'd like to import:
 
-This method returns the payload in the form of array with the key representing corresponding index.
-
-```php
-public function toSearchableArray(): array
-{
-    return [
-        'global_search' => [
-            'type' => 'book',
-            'id' => $this->getSearchKey(),
-            'name' => $this->name,
-            'author' => $this->author,
-            'description' => $this->description,
-            'created_at' => $this->created_at->timestamp,
-        ],
-    ];
-}
+```bash
+php artisan app:import-search global_search
 ```
 
-You can also overwrite the `shouldBeSearchable` method to indicate whether the record should be indexed.
+## Remove index and all records
+
+To remove the index and all its records use the following command:
+
+```bash
+php artisan app:purge-search global_search
+```
 
 ## Contributions
 
