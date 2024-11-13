@@ -145,6 +145,16 @@ class Typesense implements Indexer
     /**
      * {@inheritDoc}
      *
+     * @throws TypesenseClientError|HttpClientException
+     */
+    public function export(string $index): string
+    {
+        return $this->client->collections[$index]->documents->export();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
      * @throws \Http\Client\Exception
      * @throws \Typesense\Exceptions\TypesenseClientError
      */

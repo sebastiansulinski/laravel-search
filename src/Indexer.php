@@ -33,6 +33,11 @@ interface Indexer
     public function importChunk(?string $index, array $documents): void;
 
     /**
+     * Export all documents for the given index.
+     */
+    public function export(string $index): mixed;
+
+    /**
      * Bulk remove all documents by index.
      */
     public function purge(string $index): void;
