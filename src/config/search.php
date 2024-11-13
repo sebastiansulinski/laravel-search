@@ -111,14 +111,15 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Default Queue Connection Name
+    | Default Queue
     |--------------------------------------------------------------------------
     |
-    | Laravel's queue supports a variety of backends via a single, unified
-    | API, giving you convenient access to each backend using identical
-    | syntax for each. The default queue connection is defined below.
+    | Default queue configuration parameters.
     |
     */
 
-    'queue' => env('SEARCH_QUEUE_CONNECTION', env('QUEUE_CONNECTION', 'database')),
+    'queue' => [
+        'connection' => env('SEARCH_QUEUE_CONNECTION', env('QUEUE_CONNECTION', 'database')),
+        'queue' => env('SEARCH_QUEUE', 'default'),
+    ],
 ];

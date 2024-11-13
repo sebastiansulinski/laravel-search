@@ -17,7 +17,10 @@ class ImportSearch implements ShouldQueue
         private readonly string $index,
         private readonly array $documents
     ) {
-        $this->queue = config('search.queue');
+        $config = config('search.queue');
+
+        $this->connection = $config['connection'];
+        $this->queue = $config['queue'];
     }
 
     /**
