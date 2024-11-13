@@ -34,8 +34,8 @@ class Typesense implements Indexer
         foreach ($document->toSearchableArray() as $index => $payload) {
             if (
                 ! $this->client->collections[$index]
-                    ->documents[$document->getSearchKey()]
-                    ->update($payload)
+                    ->documents
+                    ->upsert($payload)
             ) {
                 return false;
             }

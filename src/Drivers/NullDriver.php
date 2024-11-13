@@ -85,4 +85,12 @@ class NullDriver implements Indexer
             )
         );
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function export(string $index): null
+    {
+        return null;
+    }
 }
