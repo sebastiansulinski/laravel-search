@@ -12,6 +12,8 @@ use SebastianSulinski\Search\Filter\RequestParams;
 use SebastianSulinski\Search\Filter\Response;
 use SebastianSulinski\Search\Indexer;
 use SebastianSulinski\SearchTests\BaseTest;
+use Workbench\App\Models\Book;
+use Workbench\App\Models\Movie;
 
 class SearchTest extends BaseTest
 {
@@ -22,8 +24,10 @@ class SearchTest extends BaseTest
     {
         config([
             'search' => [
-                'default' => null,
-                'indexes' => 'global_search',
+                'models' => [
+                    Book::class,
+                    Movie::class,
+                ],
             ],
         ]);
 
@@ -55,6 +59,15 @@ class SearchTest extends BaseTest
     #[Test]
     public function returns_pagination_with_correct_values(): void
     {
+        config([
+            'search' => [
+                'models' => [
+                    Book::class,
+                    Movie::class,
+                ],
+            ],
+        ]);
+
         $this->partialMock(Indexer::class, function (MockInterface $mock) {
             $mock->shouldReceive('search')->once()->andReturn(new Response(
                 records: new Collection,

@@ -11,6 +11,8 @@ use Typesense\Collection;
 use Typesense\Collections;
 use Typesense\Documents;
 use Typesense\Lib\Configuration;
+use Workbench\App\Models\Book;
+use Workbench\App\Models\Movie;
 
 class TypesenseSearchTest extends BaseTest
 {
@@ -24,7 +26,10 @@ class TypesenseSearchTest extends BaseTest
                 require __DIR__.'/../../src/config/search.php',
                 [
                     'default' => 'typesense',
-                    'indexes' => 'global_search',
+                    'models' => [
+                        Book::class,
+                        Movie::class,
+                    ],
                 ]),
         ]);
 

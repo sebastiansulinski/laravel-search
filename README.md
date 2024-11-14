@@ -22,20 +22,12 @@ Start by publishing vendor configuration file `search.php`
 php artisan vendor:publish --provider="SebastianSulinski\Search\SearchServiceProvider"
 ```
 
-Within the configuration file update parameters for your selected driver and add all models to the `models` array, as
-well as
-all available indexes to `indexes`:
+Within the configuration file update parameters for your selected driver and add all models to the `models` array:
 
 ```php
 'models' => [
     App\Models\Book::class,
     App\Models\Movie::class,
-],
-
-'indexes' => [
-    'global_search',
-    'books',
-    'movies',
 ]
 ```
 
@@ -75,6 +67,17 @@ Add the following to your `services.php` config file and update accordingly:
 Each of the models defined within the configuration file under `models` array has to implement `IndexableDocument` and
 use `SearchIndexable` trait.
 
+```php
+use Illuminate\Database\Eloquent\Model;
+use SebastianSulinski\Search\IndexableDocument;
+use SebastianSulinski\Search\SearchIndexable;
+
+class Book extends Model implements IndexableDocument
+{
+    // ...
+    use SearchIndexable;
+```
+
 You will also need to implement two methods:
 
 ### searchableAs
@@ -112,7 +115,9 @@ You can also overwrite the `shouldBeSearchable` method to indicate whether the r
 
 ## Register search request parameters for your given implementation
 
-Within your `AppServiceProvider::boot` method add all relevant validation rules for a given index.
+If you are using the built-in controller with the `SearchRequest`, within your `AppServiceProvider::boot` method add all
+relevant validation
+rules for a given index.
 These will be used with the `Indexer::search` method - if you are using different approach for the search, you can
 ignore these.
 By default, only `index` and `params` (as array) are validated - whatever you define via this method will be merged to

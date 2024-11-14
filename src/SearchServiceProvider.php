@@ -13,8 +13,6 @@ class SearchServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any package services.
-     *
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function boot(): void
     {
@@ -36,20 +34,6 @@ class SearchServiceProvider extends ServiceProvider
         if (Search::$loadRoutes) {
             $this->loadRoutesFrom(__DIR__.'/routes/search.php');
         }
-
-        $this->registerObserver();
-    }
-
-    /**
-     * Register observer.
-     *
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
-     */
-    private function registerObserver(): void
-    {
-        foreach ($this->app->make('config')->get('search.models') as $model) {
-            $model::observe($this->app->make(SearchObserver::class));
-        }
     }
 
     /**
@@ -58,7 +42,8 @@ class SearchServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(
-            Indexer::class, fn (Application $app) => $app->make(SearchManager::class)->driver()
+            Indexer::class,
+            fn (Application $app) => $app->make(SearchManager::class)->driver()
         );
 
         $this->app->bind(
@@ -66,9 +51,5 @@ class SearchServiceProvider extends ServiceProvider
                 $app->make('config')->get('services.typesense')
             )
         );
-
-        $this->app->bind(SearchObserver::class, function (Application $app) {
-            return new SearchObserver($app->make(Indexer::class));
-        });
     }
 }

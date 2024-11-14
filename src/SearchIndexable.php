@@ -32,6 +32,14 @@ trait SearchIndexable
     }
 
     /**
+     * Register observer.
+     */
+    public static function bootSearchIndexable(): void
+    {
+        static::observe(SearchObserver::class);
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getSearchKey(): string

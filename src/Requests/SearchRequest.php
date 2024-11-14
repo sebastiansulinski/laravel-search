@@ -4,6 +4,7 @@ namespace SebastianSulinski\Search\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use SebastianSulinski\Search\Facades\Search;
 
 /**
  * @property string $index
@@ -19,7 +20,7 @@ class SearchRequest extends FormRequest
         return $this->attachMacro([
             'index' => [
                 'required',
-                Rule::in(config('search.indexes')),
+                Rule::in(Search::availableIndexes()),
             ],
             'params' => [
                 'required',

@@ -37,6 +37,18 @@ class Search extends Facade
     }
 
     /**
+     * Get a list of all available indexes.
+     */
+    public static function availableIndexes(): array
+    {
+        return collect(config('search.models', []))
+            ->flatMap(fn (string $model) => $model::searchableAs())
+            ->unique()
+            ->values()
+            ->toArray();
+    }
+
+    /**
      * Add custom validation rules for a given index.
      */
     public static function validation(string $index, callable|object|array $rules): void
