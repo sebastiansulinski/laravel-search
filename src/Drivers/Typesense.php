@@ -5,6 +5,7 @@ namespace SebastianSulinski\Search\Drivers;
 use Http\Client\Exception as HttpClientException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\LazyCollection;
+use Illuminate\Support\Str;
 use SebastianSulinski\Search\Filter\Paging;
 use SebastianSulinski\Search\Filter\RequestParams;
 use SebastianSulinski\Search\Filter\Response;
@@ -147,9 +148,11 @@ class Typesense implements Indexer
      *
      * @throws TypesenseClientError|HttpClientException
      */
-    public function export(string $index): string
+    public function export(string $index): array
     {
-        return $this->client->collections[$index]->documents->export();
+        return json_decode('['.Str::replace(
+            PHP_EOL, ',', $this->client->collections[$index]->documents->export()
+        ).']');
     }
 
     /**

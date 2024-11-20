@@ -35,7 +35,7 @@ interface Indexer
     /**
      * Export all documents for the given index.
      */
-    public function export(string $index): mixed;
+    public function export(string $index): ?array;
 
     /**
      * Bulk remove all documents by index.
