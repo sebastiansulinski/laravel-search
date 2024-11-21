@@ -9,7 +9,7 @@ class NullResponse extends Response
     /**
      * NullResponse constructor.
      */
-    public function __construct(string $index, mixed $query)
+    public function __construct(string $index, ?string $query = null)
     {
         parent::__construct(
             new Collection,
