@@ -7,5 +7,5 @@ class RequestParams
     /**
      * Params constructor.
      */
-    public function __construct(public string $index, public ?string $query = null) {}
+    public function __construct(public string $index, public string $query) {}
 }
