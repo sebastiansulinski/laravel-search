@@ -1,71 +1,71 @@
 {
-    "name": "sebastiansulinski/laravel-search",
-    "type": "project",
-    "description": "A lightweight search component for Laravel 11+.",
-    "keywords": [
-        "laravel",
-        "search"
-    ],
-    "authors": [
-        {
-            "name": "Sebastian Sulinski",
-            "email": "seb@sulinski.me"
-        }
-    ],
-    "license": "MIT",
-    "require": {
-        "php": "^8.2",
-        "laravel/framework": "^11.30",
-        "typesense/typesense-php": "^4.9",
-        "laravel/pint": "^1.18"
-    },
-    "autoload": {
-        "psr-4": {
-            "SebastianSulinski\\Search\\": "src",
-            "SebastianSulinski\\SearchTests\\": "tests"
-        }
-    },
-    "require-dev": {
-        "orchestra/testbench": "^9.5",
-        "phpunit/phpunit": "^11.0.1"
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Workbench\\App\\": "workbench/app/",
-            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
-            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
-        }
-    },
-    "scripts": {
-        "post-autoload-dump": [
-            "@clear",
-            "@prepare"
-        ],
-        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
-        "prepare": "@php vendor/bin/testbench package:discover --ansi",
-        "build": "@php vendor/bin/testbench workbench:build --ansi",
-        "serve": [
-            "Composer\\Config::disableProcessTimeout",
-            "@build",
-            "@php vendor/bin/testbench serve --ansi"
-        ],
-        "lint": [
-            "@php vendor/bin/phpstan analyse --verbose --ansi"
-        ]
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "SebastianSulinski\\Search\\SearchServiceProvider"
-            ],
-            "aliases": {
-                "Search": "SebastianSulinski\\Search\\Facades\\Search"
-            }
-        }
-    },
-    "config": {
-        "allow-plugins": {
-            "php-http/discovery": true
-        }
+  "name": "sebastiansulinski/laravel-search",
+  "type": "project",
+  "description": "A lightweight search component for Laravel 11+.",
+  "keywords": [
+    "laravel",
+    "search"
+  ],
+  "authors": [
+    {
+      "name": "Sebastian Sulinski",
+      "email": "seb@sulinski.me"
     }
+  ],
+  "license": "MIT",
+  "require": {
+    "php": "^8.2",
+    "laravel/framework": "^12.0",
+    "typesense/typesense-php": "^5.0",
+    "laravel/pint": "^1.21"
+  },
+  "autoload": {
+    "psr-4": {
+      "SebastianSulinski\\Search\\": "src",
+      "SebastianSulinski\\SearchTests\\": "tests"
+    }
+  },
+  "require-dev": {
+    "orchestra/testbench": "^10.1",
+    "phpunit/phpunit": "^11.5.3"
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Workbench\\App\\": "workbench/app/",
+      "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+      "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+    }
+  },
+  "scripts": {
+    "post-autoload-dump": [
+      "@clear",
+      "@prepare"
+    ],
+    "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+    "prepare": "@php vendor/bin/testbench package:discover --ansi",
+    "build": "@php vendor/bin/testbench workbench:build --ansi",
+    "serve": [
+      "Composer\\Config::disableProcessTimeout",
+      "@build",
+      "@php vendor/bin/testbench serve --ansi"
+    ],
+    "lint": [
+      "@php vendor/bin/phpstan analyse --verbose --ansi"
+    ]
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "SebastianSulinski\\Search\\SearchServiceProvider"
+      ],
+      "aliases": {
+        "Search": "SebastianSulinski\\Search\\Facades\\Search"
+      }
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "php-http/discovery": true
+    }
+  }
 }

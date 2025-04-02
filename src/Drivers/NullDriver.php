@@ -14,6 +14,11 @@ class NullDriver implements Indexer
     /**
      * {@inheritDoc}
      */
+    public function initialise(): void {}
+
+    /**
+     * {@inheritDoc}
+     */
     public function create(IndexableDocument $document): bool
     {
         return true;

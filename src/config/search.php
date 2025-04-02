@@ -70,6 +70,8 @@ return [
                     ],
                 ],
             ],
+
+            'remove_undefined_collections' => env('SEARCH_REMOVE_UNDEFINED_COLLECTIONS', false),
         ],
     ],
 

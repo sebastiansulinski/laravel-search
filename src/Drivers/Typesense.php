@@ -23,7 +23,90 @@ class Typesense implements Indexer
     /**
      * Indexer constructor.
      */
-    public function __construct(private readonly Client $client, private readonly Collection $models, private readonly array $collections) {}
+    public function __construct(
+        private readonly Client $client,
+        private readonly Collection $models,
+        private readonly array $collections,
+        private readonly bool $removeUndefinedCollections = false
+    ) {}
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws TypesenseClientError|HttpClientException
+     */
+    public function initialise(): void
+    {
+        $existing = collect($this->client->collections->retrieve())
+            ->pluck('name');
+
+        foreach ($this->collections as $collection) {
+            $schema = $collection['schema'];
+
+            if ($existing->contains($schema['name'])) {
+                continue;
+            }
+
+            $this->client->collections->create($schema);
+        }
+
+        $this->removeUndefinedCollections($existing);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws TypesenseClientError|HttpClientException
+     */
+    public function create(IndexableDocument $document): bool
+    {
+        foreach ($document->toSearchableArray() as $index => $payload) {
+            if (! $this->client->collections[$index]->documents->create($payload)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Remove undefined collections.
+     *
+     * @throws TypesenseClientError|HttpClientException
+     */
+    private function removeUndefinedCollections(Collection $names): void
+    {
+        if (! $this->removeUndefinedCollections) {
+            return;
+        }
+
+        foreach ($names as $name) {
+            if (array_key_exists($name, $this->collections)) {
+                continue;
+            }
+
+            $this->client->collections[$name]->delete();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws TypesenseClientError|HttpClientException
+     */
+    public function delete(IndexableDocument $document): bool
+    {
+        foreach ($document->searchableAs() as $index) {
+            if (
+                ! $this->client->collections[$index]
+                    ->documents[$document->getSearchKey()]->delete()
+            ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     /**
      * {@inheritDoc}
@@ -53,25 +136,6 @@ class Typesense implements Indexer
     public function purge(string $index): void
     {
         $this->client->collections[$index]->delete();
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @throws TypesenseClientError|HttpClientException
-     */
-    public function delete(IndexableDocument $document): bool
-    {
-        foreach ($document->searchableAs() as $index) {
-            if (
-                ! $this->client->collections[$index]
-                    ->documents[$document->getSearchKey()]->delete()
-            ) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     /**
@@ -189,21 +253,5 @@ class Typesense implements Indexer
         } catch (ObjectNotFound) {
             return null;
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @throws TypesenseClientError|HttpClientException
-     */
-    public function create(IndexableDocument $document): bool
-    {
-        foreach ($document->toSearchableArray() as $index => $payload) {
-            if (! $this->client->collections[$index]->documents->create($payload)) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }

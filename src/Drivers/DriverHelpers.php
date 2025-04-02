@@ -9,6 +9,9 @@ trait DriverHelpers
 {
     /**
      * {@inheritDoc}
+     *
+     * @throws \Http\Client\Exception
+     * @throws \Typesense\Exceptions\TypesenseClientError
      */
     public function import(?string $index = null): void
     {
@@ -35,6 +38,9 @@ trait DriverHelpers
      * Import documents by model for the given index.
      *
      * @param  array<class-string>  $models
+     *
+     * @throws \Http\Client\Exception
+     * @throws \Typesense\Exceptions\TypesenseClientError
      */
     protected function importModels(array $models, string $index): void
     {

@@ -28,6 +28,11 @@ class SearchTest extends BaseTest
                     Book::class,
                     Movie::class,
                 ],
+                'drivers' => [
+                    'typesense' => [
+                        'collections' => [],
+                    ],
+                ],
             ],
         ]);
 

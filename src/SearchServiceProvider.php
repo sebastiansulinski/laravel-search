@@ -5,6 +5,7 @@ namespace SebastianSulinski\Search;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use SebastianSulinski\Search\Commands\ImportSearchIndex;
+use SebastianSulinski\Search\Commands\InitialiseSearchCollections;
 use SebastianSulinski\Search\Commands\PurgeSearchIndex;
 use SebastianSulinski\Search\Facades\Search;
 use Typesense\Client;
@@ -19,6 +20,7 @@ class SearchServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 ImportSearchIndex::class,
+                InitialiseSearchCollections::class,
                 PurgeSearchIndex::class,
             ]);
         }

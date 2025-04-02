@@ -25,10 +25,13 @@ class SearchManager extends Manager
      */
     public function createTypesenseDriver(): Indexer
     {
+        $driver = $this->config->get('search.drivers.typesense');
+
         return new Typesense(
             client: $this->container->make(Client::class),
             models: new Collection($this->config->get('search.models')),
-            collections: $this->config->get('search.drivers.typesense.collections')
+            collections: $driver['collections'],
+            removeUndefinedCollections: $driver['remove_undefined_collections'],
         );
     }
 

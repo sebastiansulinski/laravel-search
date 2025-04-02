@@ -8,6 +8,11 @@ use SebastianSulinski\Search\Filter\Response;
 interface Indexer
 {
     /**
+     * Initialise collections.
+     */
+    public function initialise(): void;
+
+    /**
      * Index new document.
      */
     public function create(IndexableDocument $document): bool;

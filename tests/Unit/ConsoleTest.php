@@ -14,6 +14,16 @@ class ConsoleTest extends BaseTest
     use RefreshDatabase;
 
     #[Test]
+    public function initialises_collections(): void
+    {
+        $this->partialMock(Indexer::class, function (MockInterface $mock) {
+            $mock->shouldReceive('initialise')->once();
+        });
+
+        Artisan::call('app:initialise-search');
+    }
+
+    #[Test]
     public function imports_documents(): void
     {
         $this->partialMock(Indexer::class, function (MockInterface $mock) {
