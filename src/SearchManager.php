@@ -31,7 +31,7 @@ class SearchManager extends Manager
             client: $this->container->make(Client::class),
             models: new Collection($this->config->get('search.models')),
             collections: $driver['collections'],
-            removeUndefinedCollections: $driver['remove_undefined_collections'],
+            removeUndefinedCollections: $driver['remove_undefined_collections'] ?? false,
         );
     }
 
