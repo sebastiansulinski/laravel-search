@@ -62,6 +62,17 @@ Add the following to your `services.php` config file and update accordingly:
 ],
 ```
 
+## Initialisation
+
+To create collections ready for indexing, run the follow command from within the terminal:
+
+```shell
+php artisan app:initialise-search
+```
+
+You can set `SEARCH_REMOVE_UNDEFINED_COLLECTIONS` variable to `true` if you'd like to remove any previously created
+collections that are no longer present in the `search.php` config file while executing the above command.
+
 ## Models
 
 Each of the models defined within the configuration file under `models` array has to implement `IndexableDocument` and
